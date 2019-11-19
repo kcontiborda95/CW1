@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <title>School Portal</title>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+
+</head>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+      </button>
+      <!-- <a class="navbar-brand" href="#">Logo</a> -->
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="/index.html">Home</a></li>
+          <li><a href="#">Activities</a></li>
+          <li><a href="#" data-toggle="modal" data-target="#modalRegistration"></span>Register</a></li>
+          <li><a href="#" data-toggle="modal" data-target="#modalLoginForm"></span>Login</a></li>
+          <li><a href="/courses.html" data-toggle="modal"></span>Courses</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<body>
+
+<div id="app">
+  
+<form id="courses">
+    <h2>Create New Topic</h2>
+    Topic Name:     <input type="text" v-model="inputTopic"   id="inputTopic" name="inputTopic" autofocus>
+    Topic Location: <input type="text" v-model="inputLocation" id="inputLocation" name="inputLocation">
+    Topic Price €:    <input type="text" v-model="inputPrice" id="inputPrice" name="inputPrice">
+    Topic Time:     <input type="text" v-model="inputTime" id="inputTime" name="inputTime">
+    Topic Length (Hours):   <input type="text" v-model="inputLength" id="inputLength" name="inputLength">
+  
+    <button type="submit" @click="saveTopic" class="btn btn-success">Save</button>
+  
+</form>
+<br/>
+<div class="input-group input-group-sm mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text" id="inputGroup-sizing-sm">Search By Topic:</span>
+    </div>
+    <input type="text" v-model="search" placeholder="Enter Keyword">
+  </div>
+
+<div id="filter">
+    <h2>Filter By Price</h2>
+    <select  v-model='selectedPrice' size ="5" style="width:200px">
+      <option v-for='course in myObject'>
+        {{course.price}}
+      </option>
+    </select>
+    <p>Selected Price: {{selectedPrice}}</p>
+
+</div>
+
+      <div id="courses">
+          <ul v-for="(course,index) in filteredList1" class="course">
+              <br/>
+              <li>Topic:    {{course.topic}} </li>
+              <li>Location: {{course.location}}</li>
+              <li>Price €:  {{course.price}}</li>
+              <li>Time:     {{course.time}}</li>
+              <li>Duration (Hours): {{course.length}}</li> 
+              <button type="button" class="btn btn-success">Edit {{course.topic}}</button>
+              <button type="button" class="btn btn-danger" @click="remove(index)">Delete {{course.topic}}</button>
+              <br/>
+              Rating  <input type="radio" name="rating" value="1">1
+                      <input type="radio" name="rating" value="2">2
+                      <input type="radio" name="rating" value="3">3
+                      <input type="radio" name="rating" value="4">4
+                      <input type="radio" name="rating" value="5">5
+          </ul>
+          <br/> 
+      </div> 
+</div>
+
+    <script>
+      var data = new Vue({
+              el: '#app',
+              data: 
+              {
+                // filteredList1: [],
+                inputTopic:'',
+                inputLocation:'',
+                inputPrice:'',
+                inputTime:'',
+                inputLength:'',
+                selectedTopic:'',
+                selectedPrice:'',
+                search:'',
+                myObject: JSON.parse(localStorage.getItem("SavedTopics"))
+                
+              }
+              ,
+              methods:
+              {
+                saveTopic: function(inputTopic,inputLocation,inputPrice,inputTime,inputLength)
+                {
+                  //Create object to store the variables
+                  var  myObj = 
+                  {
+                      //Mapping the fields in the object to the data being obtained through the parameters
+                      'topic':    this.inputTopic,
+                      'location': this.inputLocation,
+                      'price':    this.inputPrice,
+                      'time':     this.inputTime,
+                      'length':   this.inputLength
+                  };
+
+                  //Get the data saved in the local storage and save it inside a variable
+                  var dataBefore = GetDataFromStorage('SavedTopics');
+
+                  //Creating an empty array
+                  var jsonArray = []; 
+
+                  //If there is no data kept in local storage, push the data to the array
+                  if (dataBefore === null)
+                  {		
+                      //Pushing the data into the array
+                      jsonArray.push(myObj);			
+                      //Saving the data from the array into local storage
+                      InsertIntoLocalStorage('SavedTopics',jsonArray);                                                        
+                  }	
+                  
+                  else //if not null (already has data in the local storage)
+                  {	
+                      dataBefore.push(myObj);
+                      InsertIntoLocalStorage('SavedTopics', dataBefore);                 
+                  }
+                }
+                ,
+                remove(id)
+                {
+                  // this.myObject.splice(id);
+                  this.$delete(this.myObject, id);
+                  // localStorage.removeItem(id);
+                  // this.$delete(localStorage.removeItem(this.myObject, id));
+                  console.log("Item with " + id + " has been deleted");
+                  // window.localStorage.removeItem(this.myObject, id);
+                  localStorage.removeItem("SavedTopics,id");
+                }
+              }
+              ,
+              computed: 
+              {
+                filteredList1()
+                {
+                  return this.myObject.filter(course=>
+                  {
+                    return course.topic.toLowerCase().includes(this.search.toLowerCase());
+                  })
+                }
+              }
+      })
+
+            function InsertIntoLocalStorage(key,value)
+            {
+                //The stringify function will convert the data being saved to a string
+                localStorage.setItem(key, JSON.stringify(value));
+            }
+
+            function GetDataFromStorage(data)
+            {
+                var parsedValue = JSON.parse(localStorage.getItem(data)); 
+                return parsedValue;                                       
+            }
+    </script>
+
+    <style>
+      .course 
+      {
+        color: black;
+        border-style: solid;
+        border-color:cornflowerblue;
+        width: 15%;
+        padding: 2%;
+        
+      }
+    </style>
+    
+</body>
+</html>
