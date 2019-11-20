@@ -23,11 +23,10 @@
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="/index.html">Home</a></li>
-          <li><a href="#">Activities</a></li>
-          <li><a href="#" data-toggle="modal" data-target="#modalRegistration"></span>Register</a></li>
-          <li><a href="#" data-toggle="modal" data-target="#modalLoginForm"></span>Login</a></li>
-          <li><a href="/courses.html" data-toggle="modal"></span>Courses</a></li>
+          <li><a href="/index.html">Home</a></li>
+          <li><a href="/register.html"></span>Register</a></li>
+          <li ><a href="/Login.html"></span>Login</a></li>
+          <li class="active"><a href="/courses.html"></span>Courses</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
       </ul>
@@ -41,15 +40,15 @@
   
 <form id="courses">
     <h2>Create New Topic</h2>
-    Topic Name:     <input type="text" v-model="inputTopic"   id="inputTopic" name="inputTopic" autofocus>
-    Topic Location: <input type="text" v-model="inputLocation" id="inputLocation" name="inputLocation">
-    Topic Price €:    <input type="text" v-model="inputPrice" id="inputPrice" name="inputPrice">
-    Topic Time:     <input type="text" v-model="inputTime" id="inputTime" name="inputTime">
-    Topic Length (Hours):   <input type="text" v-model="inputLength" id="inputLength" name="inputLength">
+    Topic Name:     <input type="text" v-model="inputTopic"   id="inputTopic" name="inputTopic" autofocus><br/>
+    Topic Location: <input type="text" v-model="inputLocation" id="inputLocation" name="inputLocation"><br/>
+    Topic Price €:    <input type="text" v-model="inputPrice" id="inputPrice" name="inputPrice"><br/>
+    Topic Time:     <input type="text" v-model="inputTime" id="inputTime" name="inputTime"><br/>
+    Topic Length (Hours):   <input type="text" v-model="inputLength" id="inputLength" name="inputLength"><br/>
   
-    <button type="submit" @click="saveTopic" class="btn btn-success">Save</button>
-  
+    <button type="submit" @click="saveTopic" class="btn btn-success">Save</button>  
 </form>
+
 <br/>
 <div class="input-group input-group-sm mb-3">
     <div class="input-group-prepend">
@@ -57,7 +56,7 @@
     </div>
     <input type="text" v-model="search" placeholder="Enter Keyword">
   </div>
-
+  <br/>
 <div id="filter">
     <h2>Filter By Price</h2>
     <select  v-model='selectedPrice' size ="5" style="width:200px">
@@ -68,7 +67,7 @@
     <p>Selected Price: {{selectedPrice}}</p>
 
 </div>
-
+<br/>
       <div id="courses">
           <ul v-for="(course,index) in filteredList1" class="course">
               <br/>
@@ -88,6 +87,10 @@
           </ul>
           <br/> 
       </div> 
+
+      
+
+      
 </div>
 
     <script>
@@ -120,8 +123,17 @@
                       'location': this.inputLocation,
                       'price':    this.inputPrice,
                       'time':     this.inputTime,
-                      'length':   this.inputLength
-                  };
+                      'length':   this.inputLength,
+                      //
+                      RegistrationErrors: [],
+                      LoginErrors: [],
+                      firstname: '',
+                      lastname: '',
+                      email: null,
+                      password: null,
+                      loginEmail: null,
+                      role: "user"
+                    };
 
                   //Get the data saved in the local storage and save it inside a variable
                   var dataBefore = GetDataFromStorage('SavedTopics');
@@ -154,6 +166,39 @@
                   console.log("Item with " + id + " has been deleted");
                   // window.localStorage.removeItem(this.myObject, id);
                   localStorage.removeItem("SavedTopics,id");
+                },
+
+                checkRegisterForm: function (e) 
+                {
+                  if (this.firstname && this.lastname && this.email && this.password) 
+                  {
+                    registerUser(this.email,this.firstname,this.lastname,this.password);
+                    
+                  }
+
+                  this.RegistrationErrors = [];
+
+                  if (!this.firstname) 
+                  {
+                    this.RegistrationErrors.push('First Name required.');
+                  }
+                  
+                  if (!this.lastname) 
+                  {
+                    this.RegistrationErrors.push('Last Name required.');
+                  }
+
+                  if (!this.email) 
+                  {
+                    this.RegistrationErrors.push('E-Mail address is required.');
+                  }
+
+                  if (!this.password) 
+                  {
+                    this.RegistrationErrors.push('Password is required');
+                  }
+
+                  e.preventDefault();
                 }
               }
               ,
