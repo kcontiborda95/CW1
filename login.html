@@ -61,7 +61,7 @@
 						<input type="password" class="form-control" id="password" name="password" placeholder="password">
 					</div>
 				</div>
-				<button type="submit" class="login-button" @click="checkLogin">Login<i class="fa fa-chevron-right"></i></button>
+				<button type="submit" class="login-button" @click="checkLogin(email)">Login<i class="fa fa-chevron-right"></i></button>
 			</div>
 			<div class="etc-login-form">
 				<p>Don't have an account ? Create one <a href="/register.html">Here</a></p>
@@ -266,26 +266,24 @@
 
             e.preventDefault();
 
-          },
-
-          checkLogin: function()
-          {
-            
-            // if (this.email == '')
-            // {
-            //   alert("Please enter your email address");
-            // }
-            
-            // else
-            // {
-            //   alert("ok");
-            // }
-            
-            
-            alert("Please enter your email address");
           }
         }
         })
+
+
+  function checkLogin(email)
+  {
+    if (this.email == '')
+    {
+      alert("Email cannot be blank");
+    }
+
+    else
+    {
+      alert("OK");
+    }
+
+  };
 
   function registerUser(email,firstname,lastname,password)
   {
