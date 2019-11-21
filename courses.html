@@ -71,7 +71,7 @@
 </div>
 
 
-    <button @click="sort(myObject)">Sort</button>
+    <button type="submit" onsubmit="GetDataFromStorage(SavedUsers)">Sort</button>
 
 
 <br/>
@@ -141,98 +141,97 @@
                       role: "user"
                     };
 
-                  //Get the data saved in the local storage and save it inside a variable
-                  var dataBefore = GetDataFromStorage('SavedTopics');
+                      //Get the data saved in the local storage and save it inside a variable
+                      var dataBefore = GetDataFromStorage('SavedTopics');
 
-                  //Creating an empty array
-                  var jsonArray = []; 
+                      //Creating an empty array
+                      var jsonArray = []; 
 
-                  //If there is no data kept in local storage, push the data to the array
-                  if (dataBefore === null)
-                  {		
-                      //Pushing the data into the array
-                      jsonArray.push(myObj);			
-                      //Saving the data from the array into local storage
-                      InsertIntoLocalStorage('SavedTopics',jsonArray);                                                        
-                  }	
-                  
-                  else //if not null (already has data in the local storage)
-                  {	
-                      dataBefore.push(myObj);
-                      InsertIntoLocalStorage('SavedTopics', dataBefore);                 
-                  }
-                }
-                ,
-                remove(id)
-                {
-                  this.$delete(this.myObject, id);
-                  console.log("Item with " + id + " has been deleted");
-                  localStorage.removeItem("SavedTopics,id");
+                      //If there is no data kept in local storage, push the data to the array
+                      if (dataBefore === null)
+                      {		
+                          //Pushing the data into the array
+                          jsonArray.push(myObj);			
+                          //Saving the data from the array into local storage
+                          InsertIntoLocalStorage('SavedTopics',jsonArray);                                                        
+                      }	
+                      
+                      else //if not null (already has data in the local storage)
+                      {	
+                          dataBefore.push(myObj);
+                          InsertIntoLocalStorage('SavedTopics', dataBefore);                 
+                      }
                 },
+                      remove(id)
+                      {
+                        this.$delete(this.myObject, id);
+                        console.log("Item with " + id + " has been deleted");
+                        localStorage.removeItem("SavedTopics,id");
+                      },
 
-                // Register Form Validation on fields
-                checkRegisterForm: function (e) 
-                {
-                  if (this.firstname && this.lastname && this.email && this.password) 
-                  {
-                    registerUser(this.email,this.firstname,this.lastname,this.password);
-                    
-                  }
+                      // Register Form Validation on fields
+                      checkRegisterForm: function (e) 
+                      {
+                        if (this.firstname && this.lastname && this.email && this.password) 
+                        {
+                          registerUser(this.email,this.firstname,this.lastname,this.password);
+                          
+                        }
 
-                  this.RegistrationErrors = [];
+                        this.RegistrationErrors = [];
 
-                  if (!this.firstname) 
-                  {
-                    this.RegistrationErrors.push('First Name required.');
-                  }
-                  
-                  if (!this.lastname) 
-                  {
-                    this.RegistrationErrors.push('Last Name required.');
-                  }
+                        if (!this.firstname) 
+                        {
+                          this.RegistrationErrors.push('First Name required.');
+                        }
+                        
+                        if (!this.lastname) 
+                        {
+                          this.RegistrationErrors.push('Last Name required.');
+                        }
 
-                  if (!this.email) 
-                  {
-                    this.RegistrationErrors.push('E-Mail address is required.');
-                  }
+                        if (!this.email) 
+                        {
+                          this.RegistrationErrors.push('E-Mail address is required.');
+                        }
 
-                  if (!this.password) 
-                  {
-                    this.RegistrationErrors.push('Password is required');
-                  }
+                        if (!this.password) 
+                        {
+                          this.RegistrationErrors.push('Password is required');
+                        }
 
-                  e.preventDefault();
-                },
-                
-                // Sorting function to sort topics in ascending order
-                even: function(arr)
-                {
-                  return arr.slice().sort(function(a,b)
-                  {
-                    return a.position - b.position;
-                  });
-                },
+                        e.preventDefault();
+                      },
+                      
+                      // Sorting function to sort topics in ascending order
+                      even: function(arr)
+                      {
+                        return arr.slice().sort(function(a,b)
+                        {
+                          return a.position - b.position;
+                        });
+                      },
 
-                sort: function(myObject)
-                {
-                  alert(myObject);
-                  //myObject.sort();
+                      sort: function(myObject)
+                      {
+                        alert(myObject);
+                        //myObject.sort();
 
-                  e.preventDefault();
-                }
-              }
-              ,
-              computed: 
-              {
-                filteredList1()
-                {
-                  return this.myObject.filter(course=>
-                  {
-                    return course.topic.toLowerCase().includes(this.search.toLowerCase());
-                  })
-                }
-              }
-      })
+                        e.preventDefault();
+                      }
+                    }
+                    ,
+                    computed: 
+                    {
+                      filteredList1()
+                      {
+                        return this.myObject.filter(course=>
+                        {
+                          return course.topic.toLowerCase().includes(this.search.toLowerCase());
+                        })
+                      }
+                    }
+        })
 
             function InsertIntoLocalStorage(key,value)
             {
