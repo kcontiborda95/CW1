@@ -255,24 +255,30 @@
             if(email==creds.email && password==creds.password)
             {
                 //If there is a match
-                alert("Successfully Logged In - You are being redirected");
-                
+                //alert("Successfully Logged In - You are being redirected");
                 //Redirect to the page
-                window.location.assign ="courses.html";
-
+                redirect(email);
+                
                 //Save the users details in local storage
                 InsertIntoLocalStorage('LoggedUser', email);
                 return false;
             }
         }
 
-        if (email != creds.email && password != creds.password)
+        if (email != creds.email || password != creds.password)
         {
           alert("Account not found / Incorrect login details");
           console.log("Account not found / Incorrect login details");
         }
     }
   };
+
+  function redirect(email)
+  {
+    var loggedinuser = GetDataFromStorage('LoggedUser');
+    alert("You are logged in as " + loggedinuser);
+    console.log("Logged in as " + loggedinuser);
+  }
 
   function GetDataFromStorage(data)
   {
