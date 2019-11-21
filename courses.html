@@ -40,11 +40,11 @@
   
 <form id="courses">
     <h2>Create New Topic</h2>
-    Topic Name:     <input type="text" v-model="inputTopic"   id="inputTopic" name="inputTopic" autofocus><br/>
-    Topic Location: <input type="text" v-model="inputLocation" id="inputLocation" name="inputLocation"><br/>
-    Topic Price €:    <input type="text" v-model="inputPrice" id="inputPrice" name="inputPrice"><br/>
-    Topic Time:     <input type="text" v-model="inputTime" id="inputTime" name="inputTime"><br/>
-    Topic Length (Hours):   <input type="text" v-model="inputLength" id="inputLength" name="inputLength"><br/>
+    Topic Name:     <input type="text" v-model="inputTopic"   id="inputTopic" name="inputTopic" class="form-control" placeholder="Enter Topic Name" autofocus><br/>
+    Topic Location: <input type="text" v-model="inputLocation" id="inputLocation" name="inputLocation" class="form-control" placeholder="Enter Location"><br/>
+    Topic Price €:    <input type="text" v-model="inputPrice" id="inputPrice" name="inputPrice" class="form-control" placeholder="Enter Price in €"><br/>
+    Topic Time:     <input type="text" v-model="inputTime" id="inputTime" name="inputTime" class="form-control" placeholder="Enter Topic Time"><br/>
+    Topic Length (Hours):   <input type="text" v-model="inputLength" id="inputLength" name="inputLength" class="form-control" placeholder="Enter Topic Length (Duration)"><br/>
   
     <button type="submit" @click="saveTopic" class="btn btn-success">Save</button>  
 </form>
@@ -54,7 +54,7 @@
     <div class="input-group-prepend">
       <span class="input-group-text" id="inputGroup-sizing-sm">Search By Topic:</span>
     </div>
-    <input type="text" v-model="search" placeholder="Enter Keyword">
+    <input type="text" class="form-control" v-model="search" placeholder="Enter keyword to search">
   </div>
   <br/>
 <div id="filter">
@@ -124,7 +124,8 @@
                       'price':    this.inputPrice,
                       'time':     this.inputTime,
                       'length':   this.inputLength,
-                      //
+                      
+                      // Mapping fields for the registration form itself
                       RegistrationErrors: [],
                       LoginErrors: [],
                       firstname: '',
@@ -168,6 +169,7 @@
                   localStorage.removeItem("SavedTopics,id");
                 },
 
+                // Register Form Validation on fields
                 checkRegisterForm: function (e) 
                 {
                   if (this.firstname && this.lastname && this.email && this.password) 
@@ -199,6 +201,14 @@
                   }
 
                   e.preventDefault();
+                },
+
+                even: function(arr)
+                {
+                  return arr.slice().sort(function(a, b)
+                  {
+                    return a.position - b.position;
+                  });
                 }
               }
               ,
