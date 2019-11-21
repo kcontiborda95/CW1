@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 
-  <title>School Portal</title>
+  <title>Available Courses</title>
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,6 +14,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 
 </head>
+
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -28,8 +29,10 @@
           <li ><a href="/Login.html"></span>Login</a></li>
           <li class="active"><a href="/courses.html"></span>Courses</a></li>
         </ul>
+        
         <ul class="nav navbar-nav navbar-right">
-      </ul>
+        
+        </ul>
     </div>
   </div>
 </nav>
@@ -65,9 +68,14 @@
       </option>
     </select>
     <p>Selected Price: {{selectedPrice}}</p>
-
 </div>
+
+
+    <button @click="sort(myObject)">Sort</button>
+
+
 <br/>
+
       <div id="courses">
           <ul v-for="(course,index) in filteredList1" class="course">
               <br/>
@@ -86,15 +94,12 @@
                       <input type="radio" name="rating" value="5">5
           </ul>
           <br/> 
-      </div> 
-
-      
-
-      
+    </div> 
 </div>
 
     <script>
-      var data = new Vue({
+      var data = new Vue
+      ({
               el: '#app',
               data: 
               {
@@ -198,13 +203,22 @@
 
                   e.preventDefault();
                 },
-
+                
+                // Sorting function to sort topics in ascending order
                 even: function(arr)
                 {
-                  return arr.slice().sort(function(a, b)
+                  return arr.slice().sort(function(a,b)
                   {
                     return a.position - b.position;
                   });
+                },
+
+                sort: function(myObject)
+                {
+                  alert(myObject);
+                  //myObject.sort();
+
+                  e.preventDefault();
                 }
               }
               ,
@@ -231,6 +245,8 @@
                 var parsedValue = JSON.parse(localStorage.getItem(data)); 
                 return parsedValue;                                       
             }
+
+            
     </script>
 
     <style>
