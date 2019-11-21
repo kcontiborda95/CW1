@@ -46,7 +46,7 @@
 	<div class="logo">Login</div>
 	<!-- Main Form -->
 	<div class="login-form-1">
-		<form id="login-form" class="text-left" action="/loggedin.html">
+		<form id="login-form" class="text-left">
 			<div class="login-form-main-message"></div>
 			<div class="main-login-form">
 				<div class="login-group">
@@ -59,7 +59,7 @@
 						<input type="password" class="form-control" id="password" name="password" placeholder="Password">
 					</div>
 				</div>
-				<button type="submit" class="login-button" @click="checkLogin(email)">Login<i class="fa fa-chevron-right"></i></button>
+				<button type="submit" class="login-button" onclick="checkLogin()">Login<i class="fa fa-chevron-right"></i></button>
 			</div>
 			<div class="etc-login-form">
 				<p>Don't have an account ? Create one <a href="/register.html">Here</a></p>
@@ -232,101 +232,46 @@
 
         methods:
         {
-          checkRegisterForm: function (e) 
-          {
-            if (this.firstname && this.lastname && this.email && this.password) 
-            {
-              registerUser(this.email,this.firstname,this.lastname,this.password);
-              
-            }
-
-            this.RegistrationErrors = [];
-
-            if (!this.firstname) 
-            {
-              this.RegistrationErrors.push('First Name required.');
-            }
-            
-            if (!this.lastname) 
-            {
-              this.RegistrationErrors.push('Last Name required.');
-            }
-
-            if (!this.email) 
-            {
-              this.RegistrationErrors.push('E-Mail address is required.');
-            }
-
-            if (!this.password) 
-            {
-              this.RegistrationErrors.push('Password is required');
-            }
-
-            e.preventDefault();
-
-          }
+        
         }
         })
 
 
-  function checkLogin(email)
+  function checkLogin()
   {
-    if (this.email == '')
+    var email = document.forms["login-form"]["email"].value; 
+    var password = document.forms["login-form"]["password"].value; 
+    var deSerialzedObject = GetDataFromStorage("SavedUsers");
+
+    //If the local storage is not empty, meaning that there are stored credentials,
+    //for each credential in storage, check if email and password match the ones entered
+    //in the form by the user 
+    if(deSerialzedObject !== null)
     {
-      alert("Email cannot be blank");
+        //Looping through each and every credential detail pair stored in local storage
+        for(var creds of deSerialzedObject) 
+        {
+            //Check if the email and password entered match what is stored in the local storage
+            if(email==creds.email && password==creds.password)
+            {
+                //If there is a match
+                alert("Successfully Logged In - You are being redirected");
+                
+                //Redirect to the page
+                window.location.assign ="courses.html";
+
+                //Save the users details in local storage
+                InsertIntoLocalStorage('LoggedUser', email);
+                return false;
+            }
+        }
+
+        if (email != creds.email && password != creds.password)
+        {
+          alert("Account not found / Incorrect login details");
+          console.log("Account not found / Incorrect login details");
+        }
     }
-
-    else
-    {
-      alert("OK");
-    }
-
-  };
-
-  function registerUser(email,firstname,lastname,password)
-  {
-      //Create object to store the variables
-      var  myObj = 
-      {
-          //Mapping the fields in the object to the data being obtained through the parameters
-          'email': email,
-          'firstname': firstname,
-          'lastname': lastname,
-          'password': password,
-          'role': "user" //User may be either student, parent, serviceprovider
-      };
-
-      //Get the data saved in the local storage and save it inside a variable
-      var dataBefore = GetDataFromStorage('SavedUsers');
-
-      //Creating an empty array
-      var jsonArray = []; 
-
-      //If there is no data kept in local storage, push the data to the array
-      if (dataBefore === null)
-      {		
-          //Pushing the data into the array
-          jsonArray.push(myObj);			
-          //Saving the data from the array into local storage
-          InsertIntoLocalStorage('SavedUsers',jsonArray); 
-          alert("Success");                                                       
-      }	
-      
-      else
-      {	
-          //Check if the email address already exists
-          if(checkAccount(email))              
-          {   //If the account / email address does not exist in local storage, create it        
-              dataBefore.push(myObj);
-              InsertIntoLocalStorage('SavedUsers', dataBefore);    
-              alert("Success");             
-          }
-          else
-          {
-              //Notify that the email has already been used
-              alert("This email address has already been used. Please choose another email address for your account !") 
-          }
-      }
   };
 
   function GetDataFromStorage(data)
@@ -340,25 +285,8 @@
   {
       //The stringify function will convert the data being saved to a string
       localStorage.setItem(key, JSON.stringify(value));
-  };
-
-
-  // CHECK ACCOUNT IF ALREADY EXISTS
-  function checkAccount(email)
-  {
-      var deSerialzedObject = GetDataFromStorage('SavedUsers');
-      console.log(deSerialzedObject);
-      
-      for(var creds of deSerialzedObject) 
-      {   
-          if(email == creds.email)  
-          {
-              return false;
-          } 
-      }
-      return true;
-  };   
-  </script>
+  };  
+</script>
 
   </body>
 </html>
