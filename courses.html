@@ -103,6 +103,8 @@
               el: '#app',
               data: 
               {
+                //The filtered list must be turned on initially (uncommented when loading the page for the first time without any data stored in local storage.), otherwise the components will not appear due to a bug in VueJS.
+                // when there is existent data in the local storage, re-comment declaration of the filteredlist.
                 // filteredList1: [],
                 inputTopic:'',
                 inputLocation:'',
@@ -139,7 +141,7 @@
                       password: null,
                       loginEmail: null,
                       role: "user"
-                    };
+                  };
 
                       //Get the data saved in the local storage and save it inside a variable
                       var dataBefore = GetDataFromStorage('SavedTopics');
